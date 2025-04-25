@@ -6,7 +6,7 @@ local TweenService = game:GetService("TweenService")
 local scriptsList = {
     {name = "سكربت 100 مليار", url = "https://raw.githubusercontent.com/Rxwab/Kaboos_dragoon/main/Kaboosdragoon.lua"},
     {name = "اسكربت اختراق ثغرات backdoor", url = "https://raw.githubusercontent.com/Rxwab/Script_hacker_backdor/main/Kaboos_backdoor.lua"},
-    {name = "Free Items Script", url = "https://pastebin.com/raw/example2"},
+    {name = "سكربت نسخ Dead Rails", url = "https://raw.githubusercontent.com/Rxwab/copy_tools_deadraills/main/DeadRails.lua"},
 }
 
 -- واجهة قائمة السكربتات
