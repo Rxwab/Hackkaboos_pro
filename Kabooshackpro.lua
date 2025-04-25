@@ -1,223 +1,213 @@
--- سكربت واجهة القائمة الرئيسية الفاخرة
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 
--- إعدادات السكربتات
-local scripts = {
-    {name = "سكربت الفلوس (100 مليار)", url = "https://raw.githubusercontent.com/Rxwab/Kaboos_dragoon/main/Kaboosdragoon.lua"},
-    {name = "سكربت ماب القطار", url = "https://raw.githubusercontent.com/Rxwab/Kaboos_Dead-Rails/main/DeadRailsDeltaHackUI_Kaboos.lua"}
+-- قائمة السكربتات (قابلة للتعديل)
+local scriptsList = {
+    {name = "سكربت 100 مليار", url = "https://raw.githubusercontent.com/Rxwab/Kaboos_dragoon/main/Kaboosdragoon.lua"},
+    {name = "Super Points Hack", url = "https://pastebin.com/raw/example1"},
+    {name = "Free Items Script", url = "https://pastebin.com/raw/example2"},
 }
 
--- دالة لإنشاء أنيميشن الخط المتحرك
-local function createBorderAnimation(parent, borderColor)
-    local Border = Instance.new("Frame")
-    Border.Size = UDim2.new(1, 4, 1, 4)
-    Border.Position = UDim2.new(0, -2, 0, -2)
-    Border.BackgroundTransparency = 1
-    Border.Parent = parent
-
-    local Top = Instance.new("Frame")
-    Top.Size = UDim2.new(0, 0, 0, 4)
-    Top.Position = UDim2.new(0, 0, 0, -2)
-    Top.BackgroundColor3 = borderColor
-    Top.Parent = Border
-
-    local Bottom = Instance.new("Frame")
-    Bottom.Size = UDim2.new(0, 0, 0, 4)
-    Bottom.Position = UDim2.new(1, 0, 1, -2)
-    Bottom.BackgroundColor3 = borderColor
-    Bottom.Parent = Border
-
-    local Left = Instance.new("Frame")
-    Left.Size = UDim2.new(0, 4, 0, 0)
-    Left.Position = UDim2.new(0, -2, 0, 0)
-    Left.BackgroundColor3 = borderColor
-    Left.Parent = Border
-
-    local Right = Instance.new("Frame")
-    Right.Size = UDim2.new(0, 4, 0, 0)
-    Right.Position = UDim2.new(1, -2, 1, 0)
-    Right.BackgroundColor3 = borderColor
-    Right.Parent = Border
-
-    local function animateBorder()
-        while true do
-            TweenService:Create(Top, TweenInfo.new(1, Enum.EasingStyle.Sine), {Size = UDim2.new(1, 0, 0, 4)}):Play()
-            wait(1)
-            TweenService:Create(Right, TweenInfo.new(1, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 4, 1, 0)}):Play()
-            wait(1)
-            TweenService:Create(Bottom, TweenInfo.new(1, Enum.EasingStyle.Sine), {Size = UDim2.new(1, 0, 0, 4), Position = UDim2.new(0, 0, 1, -2)}):Play()
-            wait(1)
-            TweenService:Create(Left, TweenInfo.new(1, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 4, 1, 0)}):Play()
-            wait(1)
-            TweenService:Create(Top, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 0, 0, 4)}):Play()
-            TweenService:Create(Right, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 4, 0, 0)}):Play()
-            TweenService:Create(Bottom, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 0, 0, 4)}):Play()
-            TweenService:Create(Left, TweenInfo.new(0.5, Enum.EasingStyle.Sine), {Size = UDim2.new(0, 4, 0, 0)}):Play()
-            wait(0.5)
-        end
-    end
-    spawn(animateBorder)
-end
-
--- دالة لإنشاء القائمة الرئيسية
-local function createMainMenu()
-    print("Creating Main Menu")
+-- واجهة قائمة السكربتات
+local function createScriptsUI()
     local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Parent = PlayerGui
-    ScreenGui.Name = "MainMenuUI"
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Name = "ScriptsUI"
     ScreenGui.ResetOnSpawn = false
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    local Background = Instance.new("Frame")
+    Background.Size = UDim2.new(1, 0, 1, 0)
+    Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    Background.BackgroundTransparency = 0.7
+    Background.Parent = ScreenGui
 
     local Frame = Instance.new("Frame")
-    Frame.Size = UDim2.new(0, 400, 0, 300)
-    Frame.Position = UDim2.new(0.5, -200, 0.5, -150)
-    Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Frame.Size = UDim2.new(0, 400, 0, 500)
+    Frame.Position = UDim2.new(0.5, -200, 0.5, -250)
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Frame.BackgroundTransparency = 0.1
+    Frame.BorderSizePixel = 0
     Frame.Parent = ScreenGui
-    Frame.Visible = true
 
-    local Gradient = Instance.new("UIGradient")
-    Gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 20, 20)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 50, 50))
-    })
-    Gradient.Parent = Frame
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = UDim.new(0, 20)
+    UICorner.Parent = Frame
 
-    local FrameCorner = Instance.new("UICorner")
-    FrameCorner.CornerRadius = UDim.new(0, 12)
-    FrameCorner.Parent = Frame
+    -- عنوان القائمة
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 40)
+    Title.Position = UDim2.new(0, 0, 0, 10)
+    Title.Text = "قائمة السكربتات"
+    Title.TextColor3 = Color3.fromRGB(0, 255, 0)
+    Title.TextScaled = true
+    Title.BackgroundTransparency = 1
+    Title.Font = Enum.Font.GothamBlack
+    Title.Parent = Frame
 
-    createBorderAnimation(Frame, Color3.fromRGB(0, 255, 0))
+    -- شريط التمرير
+    local ScrollingFrame = Instance.new("ScrollingFrame")
+    ScrollingFrame.Size = UDim2.new(1, -20, 0, 300)
+    ScrollingFrame.Position = UDim2.new(0, 10, 0, 60)
+    ScrollingFrame.BackgroundTransparency = 1
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scriptsList * 60)
+    ScrollingFrame.ScrollBarThickness = 6
+    ScrollingFrame.Parent = Frame
 
+    -- تحديث قائمة السكربتات
+    local function updateScriptButtons()
+        for _, child in ipairs(ScrollingFrame:GetChildren()) do
+            if child:IsA("TextButton") then
+                child:Destroy()
+            end
+        end
+
+        for i, scriptData in ipairs(scriptsList) do
+            local ScriptButton = Instance.new("TextButton")
+            ScriptButton.Size = UDim2.new(1, 0, 0, 50)
+            ScriptButton.Position = UDim2.new(0, 0, 0, (i - 1) * 60)
+            ScriptButton.Text = scriptData.name
+            ScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ScriptButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            ScriptButton.TextScaled = true
+            ScriptButton.Font = Enum.Font.SourceSansBold
+            ScriptButton.Parent = ScrollingFrame
+
+            local ButtonCorner = Instance.new("UICorner")
+            ButtonCorner.CornerRadius = UDim.new(0, 12)
+            ButtonCorner.Parent = ScriptButton
+
+            local ButtonGlow = Instance.new("UIStroke")
+            ButtonGlow.Thickness = 2
+            ButtonGlow.Color = Color3.fromRGB(0, 255, 0)
+            ButtonGlow.Parent = ScriptButton
+
+            ScriptButton.MouseButton1Click:Connect(function()
+                local success, err = pcall(function()
+                    loadstring(game:HttpGet(scriptData.url))()
+                end)
+                if success then
+                    print("تم تنفيذ السكربت:", scriptData.name)
+                else
+                    warn("فشل تنفيذ السكربت:", scriptData.name, err)
+                end
+            end)
+        end
+        ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scriptsList * 60)
+    end
+
+    updateScriptButtons()
+
+    -- إدخال سكربت جديد
+    local ScriptNameInput = Instance.new("TextBox")
+    ScriptNameInput.Size = UDim2.new(0.45, -10, 0, 40)
+    ScriptNameInput.Position = UDim2.new(0, 10, 0, 370)
+    ScriptNameInput.Text = ""
+    ScriptNameInput.PlaceholderText = "اسم السكربت"
+    ScriptNameInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ScriptNameInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    ScriptNameInput.TextScaled = true
+    ScriptNameInput.Font = Enum.Font.SourceSans
+    ScriptNameInput.Parent = Frame
+
+    local ScriptNameCorner = Instance.new("UICorner")
+    ScriptNameCorner.CornerRadius = UDim.new(0, 12)
+    ScriptNameCorner.Parent = ScriptNameInput
+
+    local ScriptUrlInput = Instance.new("TextBox")
+    ScriptUrlInput.Size = UDim2.new(0.45, -10, 0, 40)
+    ScriptUrlInput.Position = UDim2.new(0.45, 10, 0, 370)
+    ScriptUrlInput.Text = ""
+    ScriptUrlInput.PlaceholderText = "رابط السكربت"
+    ScriptUrlInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ScriptUrlInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    ScriptUrlInput.TextScaled = true
+    ScriptUrlInput.Font = Enum.Font.SourceSans
+    ScriptUrlInput.Parent = Frame
+
+    local ScriptUrlCorner = Instance.new("UICorner")
+    ScriptUrlCorner.CornerRadius = UDim.new(0, 12)
+    ScriptUrlCorner.Parent = ScriptUrlInput
+
+    -- زر إضافة السكربت
+    local AddScriptButton = Instance.new("TextButton")
+    AddScriptButton.Size = UDim2.new(0.9, 0, 0, 50)
+    AddScriptButton.Position = UDim2.new(0.05, 0, 0, 420)
+    AddScriptButton.Text = "إضافة سكربت"
+    AddScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    AddScriptButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    AddScriptButton.TextScaled = true
+    AddScriptButton.Font = Enum.Font.GothamBold
+    AddScriptButton.Parent = Frame
+
+    local AddButtonCorner = Instance.new("UICorner")
+    AddButtonCorner.CornerRadius = UDim.new(0, 12)
+    AddButtonCorner.Parent = AddScriptButton
+
+    AddScriptButton.MouseButton1Click:Connect(function()
+        local name = ScriptNameInput.Text
+        local url = ScriptUrlInput.Text
+        if name ~= "" and url ~= "" then
+            table.insert(scriptsList, {name = name, url = url})
+            updateScriptButtons()
+            ScriptNameInput.Text = ""
+            ScriptUrlInput.Text = ""
+        end
+    end)
+
+    -- زر الإغلاق (X)
     local CloseButton = Instance.new("TextButton")
     CloseButton.Size = UDim2.new(0, 30, 0, 30)
-    CloseButton.Position = UDim2.new(1, -35, 0, 5)
+    CloseButton.Position = UDim2.new(1, -40, 0, 10)
     CloseButton.Text = "X"
     CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    CloseButton.Font = Enum.Font.GothamBold
     CloseButton.TextScaled = true
+    CloseButton.Font = Enum.Font.SourceSansBold
     CloseButton.Parent = Frame
 
     local CloseButtonCorner = Instance.new("UICorner")
-    CloseButtonCorner.CornerRadius = UDim.new(0, 8)
+    CloseButtonCorner.CornerRadius = UDim.new(0, 10)
     CloseButtonCorner.Parent = CloseButton
 
-    CloseButton.MouseEnter:Connect(function()
-        TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 50, 50)}):Play()
-    end)
-    CloseButton.MouseLeave:Connect(function()
-        TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 0, 0)}):Play()
-    end)
-
-    local Title = Instance.new("TextLabel")
-    Title.Size = UDim2.new(1, 0, 0, 50)
-    Title.Text = "قايمة السكربتات الفاخرة"
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBlack
-    Title.TextScaled = true
-    Title.BackgroundTransparency = 1
-    Title.TextStrokeTransparency = 0.8
-    Title.TextStrokeColor3 = Color3.fromRGB(0, 255, 0)
-    Title.Parent = Frame
-
-    local ScrollingFrame = Instance.new("ScrollingFrame")
-    ScrollingFrame.Size = UDim2.new(0.9, 0, 0.6, 0)
-    ScrollingFrame.Position = UDim2.new(0.05, 0, 0.2, 0)
-    ScrollingFrame.BackgroundTransparency = 1
-    ScrollingFrame.ScrollBarThickness = 8
-    ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(0, 120, 255)
-    ScrollingFrame.Parent = Frame
-
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Padding = UDim.new(0, 10)
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Parent = ScrollingFrame
-
-    for i, script in ipairs(scripts) do
-        print("Creating Button for Script: " .. script.name)
-        local ScriptButton = Instance.new("TextButton")
-        ScriptButton.Size = UDim2.new(1, 0, 0, 40)
-        ScriptButton.Text = script.name
-        ScriptButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        ScriptButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-        ScriptButton.Font = Enum.Font.GothamBold
-        ScriptButton.TextScaled = true
-        ScriptButton.Parent = ScrollingFrame
-
-        local ScriptButtonCorner = Instance.new("UICorner")
-        ScriptButtonCorner.CornerRadius = UDim.new(0, 8)
-        ScriptButtonCorner.Parent = ScriptButton
-
-        ScriptButton.MouseEnter:Connect(function()
-            TweenService:Create(ScriptButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
-        end)
-        ScriptButton.MouseLeave:Connect(function()
-            TweenService:Create(ScriptButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 120, 255)}):Play()
-        end)
-
-        ScriptButton.MouseButton1Click:Connect(function()
-            print("Executing Script: " .. script.name)
-            local success, result = pcall(function()
-                loadstring(game:HttpGet(script.url))()
-            end)
-            if success then
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "تم التشغيل",
-                    Text = "تم تشغيل " .. script.name,
-                    Duration = 3
-                })
-            else
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "خطأ",
-                    Text = "فشل تشغيل " .. script.name .. ": " .. tostring(result),
-                    Duration = 5
-                })
-            end
-        end)
-    end
-
-    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scripts * 50)
-
-    local FloatingButton = Instance.new("TextButton")
-    FloatingButton.Size = UDim2.new(0, 50, 0, 50)
-    FloatingButton.Position = UDim2.new(0, 10, 0, 10)
-    FloatingButton.Text = "🔧"
-    FloatingButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    FloatingButton.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
-    FloatingButton.Font = Enum.Font.GothamBold
-    FloatingButton.TextScaled = true
-    FloatingButton.Visible = false
-    FloatingButton.Parent = ScreenGui
-
-    local FloatingButtonCorner = Instance.new("UICorner")
-    FloatingButtonCorner.CornerRadius = UDim.new(1, 0)
-    FloatingButtonCorner.Parent = FloatingButton
-
-    local function rotateColors()
-        while true do
-            for i = 0, 1, 0.01 do
-                FloatingButton.BackgroundColor3 = Color3.fromHSV(i, 1, 1)
-                wait(0.05)
-            end
-        end
-    end
-    spawn(rotateColors)
-
     CloseButton.MouseButton1Click:Connect(function()
-        print("Closing Main Menu")
-        Frame.Visible = false
-        FloatingButton.Visible = true
-    end)
-
-    FloatingButton.MouseButton1Click:Connect(function()
-        print("Opening Main Menu")
-        Frame.Visible = true
-        FloatingButton.Visible = false
+        ScreenGui:Destroy()
+        createCircleButton()
     end)
 end
 
--- تشغيل الواجهة الرئيسية
-createMainMenu()
+-- زر الدائرة الصغيرة
+local function createCircleButton()
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.Name = "CircleButtonUI"
+    ScreenGui.ResetOnSpawn = false
+
+    local CircleButton = Instance.new("TextButton")
+    CircleButton.Size = UDim2.new(0, 50, 0, 50)
+    CircleButton.Position = UDim2.new(1, -70, 1, -70)
+    CircleButton.Text = ""
+    CircleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    CircleButton.AutoButtonColor = false
+    CircleButton.Parent = ScreenGui
+
+    local ButtonCorner = Instance.new("UICorner")
+    ButtonCorner.CornerRadius = UDim.new(1, 0)
+    ButtonCorner.Parent = CircleButton
+
+    CircleButton.MouseEnter:Connect(function()
+        CircleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    end)
+
+    CircleButton.MouseLeave:Connect(function()
+        CircleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+    end)
+
+    CircleButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+        createScriptsUI()
+    end)
+end
+
+-- تشغيل الواجهة
+createScriptsUI()
